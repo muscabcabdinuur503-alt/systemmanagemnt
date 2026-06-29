@@ -1,0 +1,6 @@
+{
+  "name": "Ibnu Khuzeyma Academy ERP Portal",
+  "description": "A comprehensive, highly polished, and responsive School Management System with Admin, Teacher, Student, and Parent dashboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

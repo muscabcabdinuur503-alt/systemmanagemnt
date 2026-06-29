@@ -1,0 +1,44 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Secure by default - deny any unexpected collections/paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Chat Messages rules
+    match /chatMessages/{messageId} {
+      // Allow reading chat messages
+      allow read: if true;
+      
+      // Allow creating a chat message only if it matches our strictly validated schema
+      allow create: if request.auth != null || (
+        request.resource.data.keys().hasAll(['chatId', 'senderId', 'senderName', 'text', 'timestamp'])
+        && request.resource.data.chatId is string
+        && request.resource.data.senderId is string
+        && request.resource.data.senderName is string
+        && request.resource.data.text is string
+      );
+      
+      // Strictly prevent updates and deletions from the frontend to preserve chat history integrity
+      allow update, delete: if false;
+    }
+    
+    // Chat Rooms rules
+    match /chatRooms/{roomId} {
+      allow read: if true;
+      
+      allow create: if request.auth != null || (
+        request.resource.data.keys().hasAll(['id', 'name', 'type', 'participants'])
+        && request.resource.data.id is string
+        && request.resource.data.name is string
+        && request.resource.data.type in ['Direct', 'Group']
+        && request.resource.data.participants is list
+      );
+      
+      allow update, delete: if false;
+    }
+  }
+}

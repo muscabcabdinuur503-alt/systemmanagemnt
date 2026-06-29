@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Represents a chat message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "chatId": { "type": "string" }
+      },
+      "required": ["id", "senderId", "text", "timestamp", "chatId"]
+    },
+    "ChatRoom": {
+      "title": "Chat Room",
+      "description": "Represents a chat room or group",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["Direct", "Group"] },
+        "participants": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "name", "type", "participants"]
+    }
+  },
+  "firestore": {
+    "/chatMessages/{messageId}": {
+      "schema": { "$ref": "ChatMessage" },
+      "description": "Collection of all chat messages"
+    },
+    "/chatRooms/{roomId}": {
+      "schema": { "$ref": "ChatRoom" },
+      "description": "Collection of all chat rooms/groups"
+    }
+  }
+}
